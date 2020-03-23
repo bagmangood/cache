@@ -1,3 +1,8 @@
+// Package queue implements a trivial Queue, with pointers between the
+// Nodes to track state. A Queue is _not_ thread safe and its callers
+// should add the relevant protection as needed (for example Cache).
+// The only non-standard behavior is the ability to bump a Node to the
+// back of the queue with the Touch function.
 package queue
 
 // Node is an element in the queue, with the implementation hidden.
@@ -12,10 +17,12 @@ func (n *Node) Value() string {
 	return n.value
 }
 
+// Next returns the next value in the queue.
 func (n *Node) Next() *Node {
 	return n.next
 }
 
+// Previous returns the previous value in the queue.
 func (n *Node) Previous() *Node {
 	return n.previous
 }
@@ -29,7 +36,7 @@ type Queue struct {
 	maxSize     int
 }
 
-// NewQueue returns a new queue with the specified max size.
+// New returns a new queue with the specified max size.
 func New(maxSize int) *Queue {
 	return &Queue{
 		head:        nil,
@@ -39,9 +46,8 @@ func New(maxSize int) *Queue {
 	}
 }
 
-// Add will add a new key to the queue, and return the new node.
-// If a string is returned, that is the key that has been bumped from the front
-// of the queue.
+// Add will add a new key to the queue, and return the new node. iff a string is
+// returned, that is the key that has been bumped from the front of the queue.
 func (q *Queue) Add(key string) (*Node, string) {
 	poppedValue := ""
 
@@ -53,7 +59,7 @@ func (q *Queue) Add(key string) (*Node, string) {
 	if q.head == nil {
 		q.head = n
 		q.tail = n
-		q.currentSize += 1
+		q.currentSize++
 		return n, poppedValue
 	}
 
@@ -64,7 +70,7 @@ func (q *Queue) Add(key string) (*Node, string) {
 		q.head.previous = nil
 	} else {
 		// otherwise the queue is under capacity and we can add normally.
-		q.currentSize += 1
+		q.currentSize++
 	}
 
 	n.previous = q.tail

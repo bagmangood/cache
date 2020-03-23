@@ -9,13 +9,13 @@ import (
 func TestLRU(t *testing.T) {
 	size := 5
 	values := [][]string{
-		[]string{"zero", "a"},
-		[]string{"one", "b"},
-		[]string{"two", "c"},
-		[]string{"three", "d"},
-		[]string{"four", "e"},
-		[]string{"five", "f"},
-		[]string{"six", "g"},
+		{"zero", "a"},
+		{"one", "b"},
+		{"two", "c"},
+		{"three", "d"},
+		{"four", "e"},
+		{"five", "f"},
+		{"six", "g"},
 	}
 
 	testCache := cache.NewLRU(size)
